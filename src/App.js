@@ -2,7 +2,9 @@ import NavBar from './components/NavBar';
 import styles from './App.module.css';
 import Container from 'react-bootstrap/Container';
 // Import Switch and Route components to set up routing.
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom';
+import './api/axiosDefaults';
+import SignUpForm from './pages/auth/SignUpForm';
 
 function App() {
     return (
@@ -19,7 +21,7 @@ function App() {
                     */}
                     <Route exact path='/' render={()=> <h1>Home Page</h1>}/>
                     <Route exact path='/signin' render={()=> <h1>Sign In</h1>}/>
-                    <Route exact path='/signup' render={()=> <h1>Sign Up</h1>}/>
+                    <Route exact path='/signup' render={()=> <SignUpForm />}/>
                     <Route render={()=> <p>Oops! Page not found.</p>}/>
                 </Switch>
             </Container>
