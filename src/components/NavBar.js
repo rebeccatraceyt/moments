@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import logo from '../assets/logo.png';
 import styles from '../styles/NavBar.module.css';
 // Import NavLink component from React router library
 import { NavLink } from 'react-router-dom';
+import { CurrentUserContext } from '../App';
 
 const NavBar = () => {
+
+    // import the current user context from sign in
+    const currentUser = useContext(CurrentUserContext);
+
+    // display appropriate content when user is logged in
+    const loggedInIcons = <>{currentUser?.username}</>
+
+    // display appropriate icons when user is logged out
+    const loggedOutIcons = (
+        <>
+            <NavLink className={styles.NavLink} activeClassName={styles.Active} to='/signin'>
+                <i className='fas fa-sign-in-alt'></i> Sign In
+            </NavLink>
+            <NavLink className={styles.NavLink} activeClassName={styles.Active} to='/signup'>
+                <i className='fas fa-user-plus'></i> Sign Up
+            </NavLink>
+        </>
+    );
+
     return (
         <Navbar className={styles.NavBar} expand="md" fixed="top">
             <Container>
@@ -20,13 +40,8 @@ const NavBar = () => {
                         <NavLink exact className={styles.NavLink} activeClassName={styles.Active} to='/'>
                             <i className='fas fa-home'></i> Home
                         </NavLink>
-                        <NavLink className={styles.NavLink} activeClassName={styles.Active} to='/signin'>
-                            <i className='fas fa-sign-in-alt'></i> Sign In
-                        </NavLink>
-                        <NavLink className={styles.NavLink} activeClassName={styles.Active} to='/signup'>
-                            <i className='fas fa-user-plus'></i> Sign Up
-                        </NavLink>
                     </Nav>
+                    {currentUser ? loggedInIcons : loggedOutIcons}
                 </Navbar.Collapse>
             </Container>
         </Navbar>
