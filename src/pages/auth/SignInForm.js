@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import styles from "../../styles/SignInUpForm.module.css";
@@ -7,14 +7,9 @@ import appStyles from "../../App.module.css";
 
 import { Form, Button, Image, Col, Row, Container, Alert } from "react-bootstrap";
 import axios from "axios";
-import { SetCurrentUserContext } from "../../App";
 
 function SignInForm() {
     
-    // exports access to the setter function from App.js
-    // assigns it to a variable to store the user data on sign in
-    const setCurrentUser = useContext(SetCurrentUserContext);
-
     const [signInData, setSignInData] = useState({
         username: '',
         password: ''
@@ -36,11 +31,7 @@ function SignInForm() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            // save the data returned from sign in
-            const {data} = await axios.post('/dj-rest-auth/login/', signInData);
-            // call it on submit with user data returned from the API
-            // setting the current user value to be used
-            setCurrentUser(data.user);
+            await axios.post('/dj-rest-auth/login/', signInData);
             history.push('/');
         } catch (err){
             setErrors(err.response?.data);
