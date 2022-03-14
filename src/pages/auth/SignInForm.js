@@ -1,5 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+// import { useContext } from "react"; - needed before useSetCurrentUser context import
 
 import styles from "../../styles/SignInUpForm.module.css";
 import btnStyles from "../../styles/Button.module.css";
@@ -7,13 +8,17 @@ import appStyles from "../../App.module.css";
 
 import { Form, Button, Image, Col, Row, Container, Alert } from "react-bootstrap";
 import axios from "axios";
-import { SetCurrentUserContext } from "../../App";
+// import { SetCurrentUserContext } from "../../App"; - needed before useSetCurrentUser context import
+import { useSetCurrentUser } from "../../contexts/CurrentUserContext";
 
 function SignInForm() {
     
     // exports access to the setter function from App.js
     // assigns it to a variable to store the user data on sign in
-    const setCurrentUser = useContext(SetCurrentUserContext);
+    // const setCurrentUser = useContext(SetCurrentUserContext) - not needed with CurrentUserContext.js
+
+    // import useSetCurrentUser hook from contexts
+    const setCurrentUser = useSetCurrentUser();
 
     const [signInData, setSignInData] = useState({
         username: '',

@@ -1,15 +1,20 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import logo from '../assets/logo.png';
 import styles from '../styles/NavBar.module.css';
 // Import NavLink component from React router library
 import { NavLink } from 'react-router-dom';
-import { CurrentUserContext } from '../App';
+import { useCurrentUser } from '../contexts/CurrentUserContext';
+// import { CurrentUserContext } from '../App'; - needed before useSetCurrentUser context import
+// import { useContext } from "react"; - needed before useSetCurrentUser context import
 
 const NavBar = () => {
 
     // import the current user context from sign in
-    const currentUser = useContext(CurrentUserContext);
+    // const currentUser = useContext(CurrentUserContext); - not needed with CurrentUserContext.js
+
+    // import useCurrentUser hook from contexts
+    const currentUser = useCurrentUser();
 
     // display appropriate content when user is logged in
     const loggedInIcons = <>{currentUser?.username}</>

@@ -5,12 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 // Router imported here to maintain tidiness (wrapping the App component inside)
 import { BrowserRouter as Router } from 'react-router-dom';
+import { CurrentUserProvider } from './contexts/CurrentUserContext';
 
 ReactDOM.render(
 	<React.StrictMode>
 		<Router>
-			{/* In order for Router to work, the App component needs to be wrapped inside */}
-    		<App />
+			{/* 
+				In order for Router to work, the App component needs to be wrapped inside
+				This keeps providers tidy and separate from App.js
+			*/}
+			<CurrentUserProvider>
+    			<App />
+			</CurrentUserProvider>
 		</Router>
     </React.StrictMode>,
 
