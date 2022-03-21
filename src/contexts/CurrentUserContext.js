@@ -1,7 +1,9 @@
 // custom context  file to store logic for the context ( in order to refactor )
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
+import { axiosReq, axiosRes } from '../api/axiosDefaults';
+import { useHistory } from 'react-router-dom';
 
 // set global user context || MOVED FROM APP.JS
 export const CurrentUserContext = createContext();
@@ -20,6 +22,9 @@ export const CurrentUserProvider = ({children}) => {
     // persist the state of the currently logged in user
     const [ currentUser, setCurrentUser ] = useState(null);
 
+    // import history variable hook to redirect users to SignIn page
+    const history = useHistory();
+
     // network request to check who the user is, based on their credentials in the cookie
     // to do that, make a GET request to the user endpoint of the API
     // the network request is made when the component mounts
@@ -27,7 +32,8 @@ export const CurrentUserProvider = ({children}) => {
         try {
             // make a GET request to the user endpoint
             // destructure the data property
-            const {data} = await axios.get('dj-rest-auth/user/');
+            // axiosRes update to the axios instance with response interceptor
+            const {data} = await axiosRes.get('dj-rest-auth/user/');
             // set the currentUser to data by calling setCurrentUser with it
             setCurrentUser(data);
         } catch(err){
@@ -38,6 +44,63 @@ export const CurrentUserProvider = ({children}) => {
     useEffect(() => {
         handleMount();
     }, []);
+
+    // useMemo hook usualy used to cache complex values that take time to compute
+    // runs before the children components are mounted
+    useMemo(() => {
+        axiosReq.interceptors.response.use(
+            async (config) => {
+                // try refresh the token before sending the request
+                try{
+                    await axios.post('/dj-rest-auth/token/refresh/');
+                } catch(err){
+                    // if that fails, and the user was previously logged in, it mean the refresh token has expired
+                    // redirect user to the SignIn page and set currentUser to null
+                    setCurrentUser((prevCurrentUser) => {
+                        if (prevCurrentUser){
+                            history.push('/signin');
+                        }
+                        return null;
+                    });
+                    return config
+                }
+                return config
+            },
+            (err) => {
+                return Promise.reject(err);
+            }
+        );
+
+        axiosRes.interceptors.response.use(
+            // if there is no error, just return the response
+            (response) => response,
+            async (err) => {
+                // if there is an error, check the error status is 401
+                if (err.response?.status === 401){
+                    // attempt to refresh the token
+                    try{
+                        await axios.post('/dj-rest-auth/token/refresh/');
+                    } catch(err){
+                        // If that fails, redirect user to Signin page
+                        setCurrentUser((prevCurrentUser) => {
+                            if (prevCurrentUser){
+                                history.push('/signin');
+                            }
+                            // set their data to null
+                            return null;
+                        });
+                    }
+                    // if there is no error refreshing the toke, return axios instance with the error config
+                    // to exit the interceptor
+                    return axios(err.config);
+                }
+                // if there wasn't a 401 error, rejext the Promise with the error to exit the interceptor
+                return Promise.reject(err);
+            }
+        );
+        // history array needed as a dependency array for the useMemo hook with history inside
+        // want useMemo to only run once but the linter will throw a warning if there is an empty dependency array
+    }, [history]);
 
     return (
         <CurrentUserContext.Provider value={currentUser}>

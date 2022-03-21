@@ -9,3 +9,15 @@ axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
 // setting to true avoids any CORS errors when sending cookies
 axios.defaults.withCredentials = true;
+
+//Need axios interceptors to intercept both requests and responses from the API - avoid auto-logout
+// 1. Response interceptor 
+//      - listens for when the API respons that the user's access token has expired
+//      - refreshes that token in the background - keeping user logged in for 24 hours    
+export const axiosReq = axios.create();
+
+// 2. Request interceptor
+//      - automatically intercept any request the application sends to the the API that requires info about logged in user
+//      - refreshes the user's access token before sending the request to the API
+//      - this means users can keep liking posts or following profiles
+export const axiosRes = axios.create();
