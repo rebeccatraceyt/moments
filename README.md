@@ -13,7 +13,7 @@
 5. **Authentication** - Logged in Status: As a user I can tell if I am logged in or not so that I can log in if I need to ✅
 6. **Authentication** - Refreshing access tokens: As a user I can maintain my logged-in status until I choose to log out so that my user experience is not compromised ✅
 7. **Navigation**: Conditional rendering - As a logged out user I can see sign in and sign up options so that I can sign in/sign up ✅
-8. **Avatar**: As a user I can view user's avatars so that I can easily identify users of the application
+8. **Avatar**: As a user I can view user's avatars so that I can easily identify users of the application ✅
 
 #### Adding & Liking Posts
 1. **Create posts**: As a logged in user I can create posts so that I can share my images with the world!

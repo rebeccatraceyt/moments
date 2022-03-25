@@ -7,6 +7,7 @@ import { NavLink } from 'react-router-dom';
 import { useCurrentUser, useSetCurrentUser } from '../contexts/CurrentUserContext';
 import Avatar from './Avatar';
 import axios from 'axios';
+import useClickOutsideToggle from '../hooks/useClickOutsideToggle';
 // import { CurrentUserContext } from '../App'; - needed before useSetCurrentUser context import
 // import { useContext } from "react"; - needed before useSetCurrentUser context import
 
@@ -18,6 +19,9 @@ const NavBar = () => {
     // import useCurrentUser hook from contexts
     const currentUser = useCurrentUser();
     const setCurrentUser = useSetCurrentUser();
+
+    // access toggle values from file, and destructure them
+    const {expanded, setExpanded, ref} = useClickOutsideToggle();
 
     // sign out logic
     const handleSignOut = async () => {
@@ -71,24 +75,39 @@ const NavBar = () => {
 
 
     return (
-        <Navbar className={styles.NavBar} expand="md" fixed="top">
+        // expanded attribute specifies that here we want to expand the navbar
+        <Navbar expanded={expanded} className={styles.NavBar} expand="md" fixed="top">
             <Container>
+
                 {/* 'to' prop works like href attribute on an anchor tag */}
                 <NavLink to='/'>
                     <Navbar.Brand><img src={logo} alt="logo" height="45" /></Navbar.Brand>
                 </NavLink>
+
                 {/* conditional that addPostIcon will only show when currentUser exists (user is logged in) */}
                 {currentUser && addPostIcon}
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
+                {/* 
+                    onclick will allow toggle of menu using the expanded state when burger icon is clicked 
+                    ref prop passed to ref value to allow reference to the DOM element and detect whether user has 
+                    clicked inside or outside of it.
+                */}
+                <Navbar.Toggle
+                    ref={ref}
+                    onClick={() => setExpanded(!expanded)}
+                    aria-controls="basic-navbar-nav"
+                />
+
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto text-left">
                         {/* 'exact' prop ensures the URL is explicitly just a slash (/), so the active class is only on homepage  */}
                         <NavLink exact className={styles.NavLink} activeClassName={styles.Active} to='/'>
                             <i className='fas fa-home'></i> Home
                         </NavLink>
+                        {currentUser ? loggedInIcons : loggedOutIcons}
                     </Nav>
-                    {currentUser ? loggedInIcons : loggedOutIcons}
                 </Navbar.Collapse>
+
             </Container>
         </Navbar>
     )
