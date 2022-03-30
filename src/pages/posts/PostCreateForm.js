@@ -72,6 +72,8 @@ function PostCreateForm() {
 		try {
 			// 1. import and use axiosReq instance
 			// 2. post formData to the post endpoint of the API
+			// before you get the image, the token is refreshed to allow the image to be uploaded
+			// therefore you need to use the axiosReq to request that token
 			const {data} = await axiosReq.post('/posts/', formData);
 			// 3. API will respond with data about newly created post, with id
 			// 4. Create unique url for the post, but adding the id to the posts url string

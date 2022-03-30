@@ -7,6 +7,7 @@ import Container from "react-bootstrap/Container";
 import appStyles from "../../App.module.css";
 import { useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
+import Post from "./Post";
 
 function PostPage() {
     
@@ -21,7 +22,7 @@ function PostPage() {
     // for compatibility with arrays (making it easier to deal with multiple data types):
     //  - set initial value of the state to an object that contains an empty array of results
     //  - which means, we can always operate on the results array, regardless of the number objects we request from API
-    const [post, setPost] = useState();
+    const [post, setPost] = useState({ results: [] });
 
     useEffect(() => {
         // fetch the post on mount
@@ -53,7 +54,9 @@ function PostPage() {
         <Row className="h-100">
             <Col className="py-2 p-0 p-lg-2" lg={8}>
                 <p>Popular profiles for mobile</p>
-                <p>Post component</p>
+                {/* spread post object from the results array so that its key value pairs are passed as props
+                    pass prop from PostPage - without a values means that it will be returned as true inside Post component */}
+                <Post {...post.results[0]} setPosts={setPost} postPage />
                 <Container className={appStyles.Content}>Comments</Container>
             </Col>
             <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
