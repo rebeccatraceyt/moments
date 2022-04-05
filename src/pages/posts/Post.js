@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { axiosRes } from "../../api/axiosDefaults";
 import Avatar from "../../components/Avatar";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import styles from "../../styles/Post.module.css";
@@ -21,7 +22,9 @@ const Post = (props) => {
         image,
         updated_at,
         postPage,
+        setPosts,
     } = props;
+    // setPosts imports setPosts function from parent (PostPage) to update likes_count
 
     // define current user with useCurrentUser hook export
     const currentUser = useCurrentUser();
@@ -29,6 +32,64 @@ const Post = (props) => {
     // check if the owner of the post matches the current user's username
     // if it does, asign it the value of is_owner
     const is_owner = currentUser?.username === owner;
+
+    const handleLike = async () => {
+        // function to handle users liking posts
+        try {
+            // make post request with axiosRes instance to the likes endpoint, with the post id
+            // lets the API know which post the user is trying to like
+            const{data} = await axiosRes.post('/likes/', {post:id});
+            // after API request, update post data with setPosts
+            //  - spread the previous posts object
+            //  - update the results array:
+            //         - map over the array
+            //         - check if post id matches id of post that was liked
+            //         - if it does:
+            //              - return the post object with the likes count, incremented by one
+            //              - return the like_id set to the id of the response data
+            //         - if it doesn't:
+            //              - return the post as normal (the map can only move onto the next post in the prevPost array)
+            setPosts((prevPosts) => ({
+                ...prevPosts,
+                results: prevPosts.results.map((post) => {
+                    return post.id === id
+                    ? { ...post, likes_count: post.likes_count + 1, like_id: data.id }
+                    : post;
+                }),
+            }));
+        } catch(err){
+            console.log(err);
+        }
+    }
+
+    const handleUnlike = async () => {
+        // function to handle users unliking posts
+        try {
+            // make delete request with axiosRes instance to the likes endpoint, with the post id
+            // lets the API know which post the user is trying to like
+            await axiosRes.delete(`/likes/${like_id}`);
+            // after API request, update post data with setPosts
+            //  - spread the previous posts object
+            //  - update the results array:
+            //         - map over the array
+            //         - check if post id matches id of post that was unliked
+            //         - if it does:
+            //              - return the post object with the likes count, decremented by one
+            //              - return the like_id set to null
+            //         - if it doesn't:
+            //              - return the post as normal (the map can only move onto the next post in the prevPost array)
+            setPosts((prevPosts) => ({
+                ...prevPosts,
+                results: prevPosts.results.map((post) => {
+                    return post.id === id
+                    ? { ...post, likes_count: post.likes_count - 1, like_id: null }
+                    : post;
+                }),
+            }));
+        } catch(err){
+            console.log(err);
+        }
+    }
 
 
     return ( 
@@ -70,11 +131,11 @@ const Post = (props) => {
                             <i className="far fa-heart" />
                         </OverlayTrigger>
                     ) : like_id ? (
-                        <span onClick={() => {}}>
+                        <span onClick={handleUnlike}>
                             <i className={`fas fa-heart ${styles.Heart}`} />
                         </span>
                     ) : currentUser ? (
-                        <span onClick={() => {}}>
+                        <span onClick={handleLike}>
                             <i className={`far fa-heart ${styles.HeartOutline}`} />
                         </span>
                     ) : (

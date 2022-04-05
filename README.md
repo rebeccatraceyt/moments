@@ -17,8 +17,8 @@
 
 #### Adding & Liking Posts
 1. **Create posts**: As a logged in user I can create posts so that I can share my images with the world! ✅
-2. **View a post**: As a user I can view the details of a single post so that I can learn more about it
-3. **Like a post**: As a logged in user I can like a post so that I can show my support for the posts that interest me
+2. **View a post**: As a user I can view the details of a single post so that I can learn more about it ✅
+3. **Like a post**: As a logged in user I can like a post so that I can show my support for the posts that interest me ✅
 
 #### The Posts Page
 1. **View most recent posts**: As a user I can view all the most recent posts, ordered by most recently created first so that I am up to date with the newest content
