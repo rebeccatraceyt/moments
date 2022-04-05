@@ -26,6 +26,9 @@ function PostsPage({ message, filter="" }) {
     // this is will detect if the user has flicked between home, feed and liked pages
     const {pathname} = useLocation();
 
+    // handle query value by destructuring the query variable
+    const [query, setQuery] = useState("");
+
     useEffect(() => {
         // API request to fetch posts using filters for each page
         // making sure to only show posts relevant to that filter or show loading icon (if necessary)
@@ -37,7 +40,7 @@ function PostsPage({ message, filter="" }) {
         //      hasLoaded turns the spinner off
         const fetchPosts = async () => {
             try {
-                const {data} = await axiosReq.get(`/posts/?${filter}`);
+                const {data} = await axiosReq.get(`/posts/?${filter}search=${query}`);
                 setPosts(data);
                 setHasLoaded(true);
             } catch(err){
@@ -47,15 +50,44 @@ function PostsPage({ message, filter="" }) {
 
         // set before posts are fetch so that the spinner will be displayed
         setHasLoaded(false);
-        fetchPosts();
 
-    }, [filter, pathname]);
+        // timeout function means the API request won't be made until one second after final keystroke
+        const timer = setTimeout(() => {
+            fetchPosts();
+        }, 1000);
+
+        // cleanup function to clear timeout so timer is left behind
+        return () => {
+            clearTimeout(timer);
+        }
+
+    }, [filter, query, pathname]);
     // effect is run every time the filter or path name change - inside the dependency array
     
     return (
         <Row className="h-100">
             <Col className="py-2 p-0 p-lg-2" lg={8}>
                 <p>Popular profiles mobile</p>
+                <i className={`fas fa-search ${styles.SearchIcon}`} />
+
+                {/* prevent default submit behaviour to stop the page refreshing
+                    and to make sure the API request is handled by the onChange event and not onSubmit
+                */}
+                <Form className={styles.SearchBar} 
+                    onSubmit={(event) => {
+                        event.preventDefault()
+                    }}
+                >
+                    {/* search bar functionality with query dynamically changed by onChange event */}
+                    <Form.Control
+                        value={query}
+                        onChange={(event) => setQuery(event.target.value)}
+                        type="text"
+                        className="mr-sm-2"
+                        placeholder="Search posts"
+                    />
+                </Form>
+
                 {hasLoaded ? (
                     <>
                         {posts.results.length ? (
