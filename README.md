@@ -21,7 +21,7 @@
 3. **Like a post**: As a logged in user I can like a post so that I can show my support for the posts that interest me ✅
 
 #### The Posts Page
-1. **View most recent posts**: As a user I can view all the most recent posts, ordered by most recently created first so that I am up to date with the newest content
+1. **View most recent posts**: As a user I can view all the most recent posts, ordered by most recently created first so that I am up to date with the newest content ✅
 2. **Search posts**: As a user, I can search for posts with keywords, so that I can find the posts and user profiles I am most interested in.
 3. **View liked posts**: As a logged in user I can view the posts I liked so that I can find the posts I enjoy the most
 4. **View posts of followed users**: As a logged in user I can view content filtered by users I follow so that I can keep up to date with what they are posting about
