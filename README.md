@@ -25,7 +25,7 @@
 2. **Search posts**: As a user, I can search for posts with keywords, so that I can find the posts and user profiles I am most interested in ✅
 3. **View liked posts**: As a logged in user I can view the posts I liked so that I can find the posts I enjoy the most ✅
 4. **View posts of followed users**: As a logged in user I can view content filtered by users I follow so that I can keep up to date with what they are posting about ✅
-5. **Infinite scroll**: As a user I can keep scrolling through the images on the site, that are loaded for me automatically so that I don't have to click on "next page" etc
+5. **Infinite scroll**: As a user I can keep scrolling through the images on the site, that are loaded for me automatically so that I don't have to click on "next page" etc ✅
 
 #### The Post Page
 1. **Post page**: As a user I can view the posts page so that I can read the comments about the post

@@ -13,6 +13,8 @@ import { axiosReq } from "../../api/axiosDefaults";
 import Post from "./Post";
 
 import NoResults from "../../assets/no-results.png";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { fetchMoreData } from "../../utils";
 
 function PostsPage({ message, filter="" }) {
     // state logic to store posts in an object in the results array (which is empty by default)
@@ -91,11 +93,25 @@ function PostsPage({ message, filter="" }) {
                 {hasLoaded ? (
                     <>
                         {posts.results.length ? (
+                            // Infinite scroll
                             // map over posts and render each one
                             // for each one, return post component, spread post object and pass setPosts function to like/unlike
-                            posts.results.map(post => (
-                                <Post key={post.id} {...post} setPosts={setPosts} />
-                            ))
+                            // dataLength prop tells component how many posts are currently displayed
+                            // hasMore prop tells InifiniteScroll whether there is more data to load on reaching the bottom of the current page
+                            // hasMore only accepts boolean value so double not operator is used
+                            //      - the operator returns true for truthy values and false for falsy values
+                            //      - if hasMore prop is true, run next prop function
+                            // next prop function is in separate utils folder
+                            <InfiniteScroll
+                                children={posts.results.map(post => (
+                                    <Post key={post.id} {...post} setPosts={setPosts} />
+                                ))}
+                                dataLength={posts.results.length}
+                                loader={<Asset spinner />}
+                                hasMore={!!posts.next}
+                                next={() => fetchMoreData(posts, setPosts)}
+                            />
+
                         ) : (
                             // show no results asset
                             <Container className={appStyles.Content}>
