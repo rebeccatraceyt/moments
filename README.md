@@ -29,7 +29,7 @@
 
 #### The Post Page
 1. **Post page**: As a user I can view the posts page so that I can read the comments about the post ✅
-2. **Edit post**: As a post owner I can edit my post title and description so that I can make corrections or update my post after it was created
+2. **Edit post**: As a post owner I can edit my post title and description so that I can make corrections or update my post after it was created ✅
 3. **Create a comment**: As a logged in user I can add comments to a post so that I can share my thoughts about the post
 4. **Comment date**: As a user I can see how long ago a comment was made so that I know how old a comment is
 5. **View comments**: As a user I can read comments on posts so that I can read what other users think about the posts

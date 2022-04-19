@@ -10,6 +10,7 @@ import PostCreateForm from './pages/posts/PostCreateForm';
 import PostPage from './pages/posts/PostPage';
 import PostsPage from './pages/posts/PostsPage';
 import { useCurrentUser } from './contexts/CurrentUserContext';
+import PostEditForm from './pages/posts/PostEditForm';
 
 function App() {
 
@@ -52,6 +53,7 @@ function App() {
                     <Route exact path="/posts/create" render={() => <PostCreateForm />}/>
                     {/* The colon means that id is a paramenter for the post url to be passed through it */}
                     <Route exact path='/posts/:id' render={() => <PostPage />}/>
+                    <Route exact path='/posts/:id/edit' render={() => <PostEditForm />}/>
                     <Route render={()=> <p>Oops! Page not found.</p>}/>
                 </Switch>
             </Container>
