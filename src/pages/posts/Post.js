@@ -119,10 +119,7 @@ const Post = (props) => {
 
             <Card.Body>
                 <Media className="align-items-center justify-content-between">
-                    <Link to={`/profiles/${profile_id}`}>
-                        <Avatar src={profile_image} height={55}/>
-                        {owner}
-                    </Link>
+                    ;
                     <div className="d-flex align-items-center">
                         <span>{updated_at}</span>
                         {/* checking if currently logged in user is the owner and if postPage prop exists (user is on single post page)

@@ -10,6 +10,7 @@ import { axiosReq } from "../../api/axiosDefaults";
 import Post from "./Post";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import CommentCreateForm from "../comments/CommentCreateForm";
+import Comment from "../comments/Comment";
 
 function PostPage() {
     
@@ -39,13 +40,18 @@ function PostPage() {
                 // Promise.all accepts an array of promises and gets resovled when all promises get resolved
                 // this returns the array of data
                 // If any promises in the array were to fail, Promise.all will be rejected, with an error
-                const [{data: post}] = await Promise.all([
+                const [{data: post}, {data: comments}] = await Promise.all([
+                    // request to API to return specific post
                     axiosReq.get(`/posts/${id}`),
+
+                    // request to API to return comments for specific post
+                    axiosReq.get(`/comments/?post=${id}`)
                 ]);
 
                 // setPost function updates results array, in the state, to contain that post
                 setPost({results: [post]});
-                console.log(post);
+                // setComments to update state and display comments
+                setComments(comments);
             } catch(err){
                 console.log(err);
             }
@@ -76,6 +82,28 @@ function PostPage() {
                         ) : comments.results.length ? (
                             "Comments"
                         ) : null
+                    }
+
+                    {/* check if there are any comments in the array (post has comments to display) 
+                        if so, map over the coments.
+                        if not, check if the currentUser is logged in
+                            - if so, display enocouragement to comment
+                            - if not, display 'no comments' message
+                    */}
+                    {
+                        comments.results.length ? (
+                            comments.results.map((comment) => (
+                                <Comment key={comment.id} {...comment} />
+                            ))
+                        ) : currentUser ? (
+                            <span>
+                                No comments yet, be the first one!
+                            </span>
+                        ) : (
+                            <span>
+                                No comments... yet
+                            </span>
+                        )
                     }
                 </Container>
             </Col>
