@@ -8,6 +8,8 @@ import appStyles from "../../App.module.css";
 import { useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 import Post from "./Post";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import CommentCreateForm from "../comments/CommentCreateForm";
 
 function PostPage() {
     
@@ -23,6 +25,10 @@ function PostPage() {
     //  - set initial value of the state to an object that contains an empty array of results
     //  - which means, we can always operate on the results array, regardless of the number objects we request from API
     const [post, setPost] = useState({ results: [] });
+
+    const currentUser = useCurrentUser();
+    const profile_image = currentUser?.profile_image;
+    const [comments, setComments] = useState({ results: [] });
 
     useEffect(() => {
         // fetch the post on mount
@@ -57,7 +63,21 @@ function PostPage() {
                 {/* spread post object from the results array so that its key value pairs are passed as props
                     pass prop from PostPage - without a values means that it will be returned as true inside Post component */}
                 <Post {...post.results[0]} setPosts={setPost} postPage />
-                <Container className={appStyles.Content}>Comments</Container>
+                <Container className={appStyles.Content}>
+                    {
+                        currentUser ? (
+                            <CommentCreateForm
+                                profile_id={currentUser.profile_id}
+                                profileImage={profile_image}
+                                post={id}
+                                setPost={setPost}
+                                setComments={setComments}
+                            />
+                        ) : comments.results.length ? (
+                            "Comments"
+                        ) : null
+                    }
+                </Container>
             </Col>
             <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
                 Popular profiles for desktop
