@@ -1,8 +1,9 @@
 import React from "react";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { axiosRes } from "../../api/axiosDefaults";
 import Avatar from "../../components/Avatar";
+import { MoreDropdown } from "../../components/MoreDropdown";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import styles from "../../styles/Post.module.css";
 
@@ -24,6 +25,7 @@ const Post = (props) => {
         postPage,
         setPosts,
     } = props;
+    // postPage prop from PostPage <Post /> component (boolean to check if user is on a single Post page)
     // setPosts imports setPosts function from parent (PostPage) to update likes_count
 
     // define current user with useCurrentUser hook export
@@ -33,12 +35,32 @@ const Post = (props) => {
     // if it does, asign it the value of is_owner
     const is_owner = currentUser?.username === owner;
 
+    // set variable to redirect users to page
+    const history = useHistory();
+
+    // function to handle redirecting user to edit page
+    const handleEdit = () => {
+       history.push(`/posts/${id}/edit`)
+    }
+
+    // function to handle user deleting post
+    const handleDelete = async () => {
+        try {
+            // make delete request with axiosRes instance to the post endpoint, with the post id
+            // lets the API know which post the user is trying to delete
+            await axiosRes.delete(`/posts/${id}/`);
+            history.goBack();
+        } catch(err){
+            console.log(err);
+        }
+    };
+
+    // function to handle users liking posts
     const handleLike = async () => {
-        // function to handle users liking posts
         try {
             // make post request with axiosRes instance to the likes endpoint, with the post id
             // lets the API know which post the user is trying to like
-            const{data} = await axiosRes.post('/likes/', {post:id});
+            const { data } = await axiosRes.post('/likes/', {post:id});
             // after API request, update post data with setPosts
             //  - spread the previous posts object
             //  - update the results array:
@@ -62,8 +84,8 @@ const Post = (props) => {
         }
     }
 
+    // function to handle users unliking posts
     const handleUnlike = async () => {
-        // function to handle users unliking posts
         try {
             // make delete request with axiosRes instance to the likes endpoint, with the post id
             // lets the API know which post the user is trying to like
@@ -103,9 +125,14 @@ const Post = (props) => {
                     </Link>
                     <div className="d-flex align-items-center">
                         <span>{updated_at}</span>
-                        {/* checking if currently logged in user is the owner and if postPage prop exists
+                        {/* checking if currently logged in user is the owner and if postPage prop exists (user is on single post page)
                             if so, display the edit and delete options for the user */}
-                        {is_owner && postPage && "..."}
+                        {is_owner && postPage && (
+                            <MoreDropdown 
+                                handleEdit={handleEdit}
+                                handleDelete={handleDelete}
+                            />
+                        )}
                     </div>
                 </Media>
             </Card.Body>

@@ -28,7 +28,7 @@
 5. **Infinite scroll**: As a user I can keep scrolling through the images on the site, that are loaded for me automatically so that I don't have to click on "next page" etc ✅
 
 #### The Post Page
-1. **Post page**: As a user I can view the posts page so that I can read the comments about the post
+1. **Post page**: As a user I can view the posts page so that I can read the comments about the post ✅
 2. **Edit post**: As a post owner I can edit my post title and description so that I can make corrections or update my post after it was created
 3. **Create a comment**: As a logged in user I can add comments to a post so that I can share my thoughts about the post
 4. **Comment date**: As a user I can see how long ago a comment was made so that I know how old a comment is
