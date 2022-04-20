@@ -5,7 +5,7 @@ import appStyles from "../../App.module.css"
 import Asset from "../../components/Asset";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
-const PopularProfiles = () => {
+const PopularProfiles = ( { mobile }) => {
     // store most followed profiles in the state to be fetched and displayed
     const [profileData, setProfileData] = useState({
         // pageProfile to be used later
@@ -42,15 +42,28 @@ const PopularProfiles = () => {
     }, [currentUser]);
 
     return (
-        <Container className={appStyles.Content}>
+        <Container
+            className={`${appStyles.Content} ${
+                mobile && 'd-lg-none text-center mb-3'
+            }`}>
             {popularProfiles.results.length ? (
                 <>
                     <p>Most followed profiles:</p>
-                    {/* map over popularProfiles results:
-                        - for each profile, display paragraph */}
-                    {popularProfiles.results.map(profile => (
-                        <p key={profile.id}>{profile.owner}</p>
-                    ))}
+                    {mobile ? (
+                        <div className="d-flex justify-content-around">
+                            {/* map over popularProfiles results:
+                                - for each profile, display paragraph */}
+                            {popularProfiles.results.slice(0,4).map(profile => (
+                                <p key={profile.id}>{profile.owner}</p>
+                            ))}
+                        </div>
+                    ) : (
+                        /* map over popularProfiles results:
+                            - for each profile, display paragraph */
+                        popularProfiles.results.map(profile => (
+                            <p key={profile.id}>{profile.owner}</p>
+                        ))
+                    )}
                 </>
             ) : (
                 // show loading spinner
