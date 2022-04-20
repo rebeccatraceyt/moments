@@ -4,6 +4,7 @@ import { axiosReq } from "../../api/axiosDefaults";
 import appStyles from "../../App.module.css"
 import Asset from "../../components/Asset";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import Profile from "./Profile";
 
 const PopularProfiles = ( { mobile }) => {
     // store most followed profiles in the state to be fetched and displayed
@@ -54,14 +55,14 @@ const PopularProfiles = ( { mobile }) => {
                             {/* map over popularProfiles results:
                                 - for each profile, display paragraph */}
                             {popularProfiles.results.slice(0,4).map(profile => (
-                                <p key={profile.id}>{profile.owner}</p>
+                                <Profile key={profile.id} profile={profile} mobile />
                             ))}
                         </div>
                     ) : (
                         /* map over popularProfiles results:
                             - for each profile, display paragraph */
                         popularProfiles.results.map(profile => (
-                            <p key={profile.id}>{profile.owner}</p>
+                            <Profile key={profile.id} profile={profile} />
                         ))
                     )}
                 </>
