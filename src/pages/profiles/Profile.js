@@ -36,7 +36,7 @@ const Profile = (props) => {
                     // if user has followed profile, following_id prop won't be null and can be used in ternary
                     following_id ? (
                         <Button
-                            className={`${btnstyles.Button} ${btnStyles.BlackOutline}`}
+                            className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
                             onClick={() => {}}
                         >
                             unfollow

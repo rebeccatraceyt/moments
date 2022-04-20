@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 // Router imported here to maintain tidiness (wrapping the App component inside)
 import { BrowserRouter as Router } from 'react-router-dom';
 import { CurrentUserProvider } from './contexts/CurrentUserContext';
+import { ProfileDataProvider } from './contexts/ProfileDataContext';
 
 ReactDOM.render(
 	<React.StrictMode>
@@ -15,7 +16,9 @@ ReactDOM.render(
 				This keeps providers tidy and separate from App.js
 			*/}
 			<CurrentUserProvider>
-    			<App />
+				<ProfileDataProvider>
+    				<App />
+				</ProfileDataProvider>
 			</CurrentUserProvider>
 		</Router>
     </React.StrictMode>,
