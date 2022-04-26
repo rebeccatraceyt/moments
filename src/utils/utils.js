@@ -1,4 +1,5 @@
-import { axiosReq } from "./api/axiosDefaults"
+import jwtDecode from "jwt-decode";
+import { axiosReq } from "../api/axiosDefaults"
 
 export const fetchMoreData = async (resource, setResource) => {
     // two arguements allow rendering and updating of different types of data for the InfiniteScroll component
@@ -64,7 +65,7 @@ export const followHelper = (profile, clickedProfile, following_id) => {
         // this is not the profile the user has clicked on, or their profile
         // then, just return it unchanged
         profile;
-}
+};
 
 export const unfollowHelper = (profile, clickedProfile) => {
     return profile.id === clickedProfile.id
@@ -88,4 +89,39 @@ export const unfollowHelper = (profile, clickedProfile) => {
         // this is not the profile the user has clicked on, or their profile
         // then, just return it unchanged
         profile;
-}
+};
+
+
+/* 
+TOKEN REFRESH FIX
+    1. Store the logged in users refresh token timestamp in localStorage
+    2. Make attempts to refresh the access token only if the timestamp exists
+    3. remove the timestamp from the browser when:
+        - user's refresh token expires
+        - user logs out
+to do this, install jwt-decode library to decode JSON Web tokens, to access timestamp within the response
+*/
+
+// set token timestamp in the browser storage
+export const setTokenTimestamp = (data) => {
+    // accept data object returned from API
+    // object comes with expiry date (exp)
+    const refreshTokenTimestamp = jwtDecode(data?.refresh_token).exp;
+
+    // save that value to the user's browser with local Storage and set ket to refreshTokenTimestamp
+    localStorage.setItem("refreshTokenTimestamp", refreshTokenTimestamp);
+};
+
+// returns boolean value to tell if user token should be refreshed
+export const shouldRefreshToken = () => {
+    // return refreshTokenTimestamp value from local storage
+    // converted by the double not logic operator
+    // this means, token will be refreshed only for logged in user
+    return !!localStorage.getItem('refreshTokenTimestamp');
+};
+
+// remove the local storage value if the user logs out or their refresh token has expired
+export const removeTokenTimestamp = () => {
+    // remove refresh token value from local storage
+    localStorage.removeItem('refreshTokenTimestamp');
+};

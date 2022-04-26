@@ -11,6 +11,7 @@ import axios from "axios";
 // import { SetCurrentUserContext } from "../../App"; - needed before useSetCurrentUser context import
 import { useSetCurrentUser } from "../../contexts/CurrentUserContext";
 import { useRedirect } from "../../hooks/useRedirect";
+import { setTokenTimestamp } from "../../utils/utils";
 
 function SignInForm() {
     
@@ -50,6 +51,11 @@ function SignInForm() {
             // call it on submit with user data returned from the API
             // setting the current user value to be used
             setCurrentUser(data.user);
+
+            // set time stamp value when user signs into app
+            // setTokenTimestamp function is called with returned data object by API, on successful login
+            // extracts the expiry data from the access token and saves to user's local storage
+            setTokenTimestamp(data);
 
             // history.push('/');
             // above updated to below to send user back, rather than redirected to home page

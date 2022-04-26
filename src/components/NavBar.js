@@ -8,6 +8,7 @@ import { useCurrentUser, useSetCurrentUser } from '../contexts/CurrentUserContex
 import Avatar from './Avatar';
 import axios from 'axios';
 import useClickOutsideToggle from '../hooks/useClickOutsideToggle';
+import { removeTokenTimestamp } from '../utils/utils';
 // import { CurrentUserContext } from '../App'; - needed before useSetCurrentUser context import
 // import { useContext } from "react"; - needed before useSetCurrentUser context import
 
@@ -28,6 +29,9 @@ const NavBar = () => {
         try {
             await axios.post('dj-rest-auth/logout/');
             setCurrentUser(null);
+            
+            // remove time stamp when needed (when refresh token expires or user logs out)
+            removeTokenTimestamp();
         } catch(err){
             console.log(err);
         }

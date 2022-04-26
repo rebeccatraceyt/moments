@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { axiosReq, axiosRes } from '../api/axiosDefaults';
 import { useHistory } from 'react-router';
+import { removeTokenTimestamp, shouldRefreshToken } from '../utils/utils';
 
 // set global user context || MOVED FROM APP.JS
 export const CurrentUserContext = createContext();
@@ -50,19 +51,24 @@ export const CurrentUserProvider = ({children}) => {
     useMemo(() => {
         axiosReq.interceptors.response.use(
             async (config) => {
-                // try refresh the token before sending the request
-                try{
-                    await axios.post('/dj-rest-auth/token/refresh/');
-                } catch(err){
-                    // if that fails, and the user was previously logged in, it mean the refresh token has expired
-                    // redirect user to the SignIn page and set currentUser to null
-                    setCurrentUser((prevCurrentUser) => {
-                        if (prevCurrentUser){
-                            history.push('/signin');
-                        }
-                        return null;
-                    });
-                    return config
+                // if block will only run if the token should be refreshed
+                if (shouldRefreshToken()){
+                    // try refresh the token before sending the request
+                    try{
+                        await axios.post('/dj-rest-auth/token/refresh/');
+                    } catch(err){
+                        // if that fails, and the user was previously logged in, it mean the refresh token has expired
+                        // redirect user to the SignIn page and set currentUser to null
+                        setCurrentUser((prevCurrentUser) => {
+                            if (prevCurrentUser){
+                                history.push('/signin');
+                            }
+                            return null;
+                        });
+                        // remove time stamp when needed (when refresh token expires or user logs out)
+                        removeTokenTimestamp();
+                        return config
+                    }
                 }
                 return config
             },
@@ -89,6 +95,8 @@ export const CurrentUserProvider = ({children}) => {
                             // set their data to null
                             return null;
                         });
+                        // remove time stamp when needed (when refresh token expires or user logs out)
+                        removeTokenTimestamp();
                     }
                     // if there is no error refreshing the toke, return axios instance with the error config
                     // to exit the interceptor
