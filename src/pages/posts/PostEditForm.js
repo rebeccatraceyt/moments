@@ -52,7 +52,7 @@ function PostEditForm() {
 				// if not, redirect them to home page
 				is_owner ? setPostData({ title, content, image }) : history.push("/");
 			} catch (err) {
-				console.log(err);
+				// console.log(err);
 			}
 		};
 
@@ -113,7 +113,7 @@ function PostEditForm() {
 			history.push(`/posts/${id}`);
 		} catch(err){
 			// In case of error, log out to console
-			console.log(err);
+			// console.log(err);
 			if (err.response?.status !== 401){
 				// update errors state variable, if not 401
 				// user will get redirected thanks to interceptor logic

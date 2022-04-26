@@ -35,7 +35,7 @@ const NavBar = () => {
             // remove time stamp when needed (when refresh token expires or user logs out)
             removeTokenTimestamp();
         } catch(err){
-            console.log(err);
+            // console.log(err);
         }
     };
 

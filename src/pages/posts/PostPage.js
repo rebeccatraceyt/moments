@@ -57,7 +57,7 @@ function PostPage() {
                 // setComments to update state and display comments
                 setComments(comments);
             } catch(err){
-                console.log(err);
+                // console.log(err);
             }
         }
 

@@ -39,7 +39,7 @@ export const fetchMoreData = async (resource, setResource) => {
             // 2. append new results to existing posts (prevResource) in post.results array in the state
         }));
     } catch(err){
-        console.log(err)
+        // console.log(err)
     }
 };
 

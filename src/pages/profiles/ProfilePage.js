@@ -71,7 +71,7 @@ function ProfilePage() {
                 // after pageProfile data has been fetched and updated the state, hide the loader
                 setHasLoaded(true);
             } catch(err) {
-                console.log(err);
+                // console.log(err);
             }
         };
 
