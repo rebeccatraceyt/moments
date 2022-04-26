@@ -44,3 +44,16 @@
 5. **View all posts by a specific user**: As a user I can view all the posts by a specific user so that I can catch up on their latest posts, or decide I want to follow them ✅
 6. **Edit profile**: As a logged in user I can edit my profile so that I can change my profile picture and bio ✅
 7. **Update username and password**: As a logged in user I can update my username and password so that I can change my display name and keep my profile secure ✅
+
+
+***
+
+## API errors and feedback
+### Example console errors that are fine:
+1. Three 401 unauthorized errors on mount/refresh
+    - Exactly three network requests are needed to establish that a user is really logged out
+2. 401 when visiting sign in and sign up pages
+    - Happens when we check if we need to redirect a logged in user away from these pages
+3. 401 error when providing incorrect form input, such as submitting the sign up form without entering a username
+4. 401 error when an access toke has expired
+    - it is refreshed in the background and the request eventually succeeds
