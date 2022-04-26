@@ -1,5 +1,5 @@
 import React from "react";
-import { Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap/Sp";
 import styles from "../styles/Asset.module.css";
 
 // destructure the props the asset component will recieve
