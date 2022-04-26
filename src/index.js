@@ -9,7 +9,9 @@ import { CurrentUserProvider } from './contexts/CurrentUserContext';
 import { ProfileDataProvider } from './contexts/ProfileDataContext';
 
 ReactDOM.render(
-	<React.StrictMode>
+	// React.StrictMode highlights potential problems in an application by running additional checks and warnings
+	// it is only for development purposes and is removed for final deployment
+	// <React.StrictMode>
 		<Router>
 			{/* 
 				In order for Router to work, the App component needs to be wrapped inside
@@ -20,8 +22,8 @@ ReactDOM.render(
     				<App />
 				</ProfileDataProvider>
 			</CurrentUserProvider>
-		</Router>
-    </React.StrictMode>,
+		</Router>,
+    // </React.StrictMode>,
 
 	// Refers to the 'root' div in index.html
   	document.getElementById('root')
