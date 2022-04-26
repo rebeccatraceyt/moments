@@ -7,15 +7,22 @@ import Asset from "../../components/Asset";
 import styles from "../../styles/ProfilePage.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
+import NoResults from "../../assets/no-results.png";
 
 import PopularProfiles from "./PopularProfiles";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useProfileData, useSetProfileData } from "../../contexts/ProfileDataContext";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Post from "../posts/Post";
+import { fetchMoreData } from "../../utils";
 
 function ProfilePage() {
     const [hasLoaded, setHasLoaded] = useState(false);
+
+    // set initial state of profile owner's posts array (empty)
+    const [profilePosts, setProfilePosts] = useState({ results: [] });
 
     // import current user context
     const currentUser = useCurrentUser();
@@ -39,19 +46,23 @@ function ProfilePage() {
         // fetch user profile data
         const fetchData = async () => {
             try {
-                // destructure the data returedn and remane it to pageProfile
+                // destructure the data returned and remane it to pageProfile
                 // Promise.all accepts the array of promises and gets resovled when all promises get resolved
                 //      promising to fetch the user profile and their posts
-                const [{data: pageProfile}] = await Promise.all([
-                    axiosReq.get(`/profiles/${id}/`)
+                const [{data: pageProfile}, {data: profilePosts}] = await Promise.all([
+                    axiosReq.get(`/profiles/${id}/`),
+                    axiosReq.get(`/posts/?owner__profile=${id}`),
                 ]);
                 // call profile data context and spread prevState, updating the pageProfile data only
                 setProfileData(prevState => ({
                     ...prevState,
-                    pageProfile: {results: [pageProfile]}
+                    pageProfile: {results: [pageProfile]},
                 }));
 
-                // after pagePrfile data has been fetched and updated the state, hide the loader
+                // call profile posts
+                setProfilePosts(profilePosts);
+
+                // after pageProfile data has been fetched and updated the state, hide the loader
                 setHasLoaded(true);
             } catch(err) {
                 console.log(err);
@@ -115,8 +126,24 @@ function ProfilePage() {
     const mainProfilePosts = (
         <>
             <hr />
-            <p className="text-center">Profile owner's posts</p>
+            <p className="text-center">{profile?.owner}'s posts</p>
             <hr />
+            {profilePosts.results.length ? (
+                <InfiniteScroll
+                    children={profilePosts.results.map((post) => (
+                        <Post key={post.id} {...post} setPosts={setProfilePosts} />
+                    ))}
+                    dataLength={profilePosts.results.length}
+                    loader={<Asset spinner />}
+                    hasMore={!!profilePosts.next}
+                    next={() => fetchMoreData(profilePosts, setProfilePosts)}
+                />
+            ) : (
+                // show no results asset
+                <Container className={appStyles.Content}>
+                    <Asset src={NoResults} message={`No results found, ${profile?.owner} hasn't posted yet.`} />
+                </Container>
+            )}
         </>
     );
 
