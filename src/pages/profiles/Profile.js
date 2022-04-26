@@ -5,6 +5,7 @@ import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import Avatar from "../../components/Avatar";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import { useSetProfileData } from "../../contexts/ProfileDataContext";
 
 const Profile = (props) => {
     // destructure profile props
@@ -13,9 +14,14 @@ const Profile = (props) => {
     // access data within profile object
     const {id, following_id, image, owner} = profile;
 
+    // access current user context
     const currentUser = useCurrentUser();
+
     // check if username matches profile owner
     const is_owner = currentUser?.username === owner;
+
+    // access setProfileData hook to destructure handleFollow function
+    const { handleFollow } = useSetProfileData();
 
     return (
         <div
@@ -44,7 +50,7 @@ const Profile = (props) => {
                     ) : (
                         <Button 
                             className={`${btnStyles.Button} ${btnStyles.Black}`}
-                            onClick={() => {}}
+                            onClick={() => handleFollow(profile)}
                         >
                             follow
                         </Button>

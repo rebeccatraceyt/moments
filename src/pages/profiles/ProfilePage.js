@@ -31,7 +31,8 @@ function ProfilePage() {
     const {id} = useParams();
 
     // import profile data context to fetch data
-    const setProfileData = useSetProfileData();
+    // with returning multiple functions within an object, destructure the data in place of the hook
+    const {setProfileData, handleFollow} = useSetProfileData();
 
     // import ProfileData hook to access pageProfile data
     const {pageProfile} = useProfileData();
@@ -111,7 +112,7 @@ function ProfilePage() {
                         ) : (
                             <Button 
                                 className={`${btnStyles.Button} ${btnStyles.Black}`}
-                                onClick={() => {}}
+                                onClick={() => handleFollow(profile)}
                             >
                                 follow
                             </Button>
