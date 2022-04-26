@@ -40,7 +40,7 @@
 1. **Profile page**: As a user I can view other users profiles so that I can see their posts and learn more about them
 2. **Most followed profiles**: As a user I can see a list of the most followed profiles so that I can see which profiles are popular ✅
 3. **User profile - user stats**: As a user I can view statistics about a specific user: bio, number of posts, follows and users followed so that I can learn more about them ✅
-4. **Follow/Unfollow a user**: As a logged in user I can follow and unfollow other users so that I can see and remove posts by specific users in my posts feed
+4. **Follow/Unfollow a user**: As a logged in user I can follow and unfollow other users so that I can see and remove posts by specific users in my posts feed ✅
 5. **View all posts by a specific user**: As a user I can view all the posts by a specific user so that I can catch up on their latest posts, or decide I want to follow them ✅
 6. **Edit profile**: As a logged in user I can edit my profile so that I can change my profile picture and bio
 7. **Update username and password**: As a logged in user I can update my username and password so that I can change my display name and keep my profile secure

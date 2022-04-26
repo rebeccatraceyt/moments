@@ -65,3 +65,27 @@ export const followHelper = (profile, clickedProfile, following_id) => {
         // then, just return it unchanged
         profile;
 }
+
+export const unfollowHelper = (profile, clickedProfile) => {
+    return profile.id === clickedProfile.id
+    ?
+        // This is the profile the user has clicked on,
+        //  - update its followers count and set its following id by -1
+        {
+            ...profile,
+            followers_count: profile.followers_count - 1,
+            following_id: null,
+        }
+    : profile.is_owner
+    ?
+        // this is the profile of logged in user
+        // update its following count by -1
+        {
+            ...profile,
+            following_count: profile.following_count - 1,
+        }
+    :
+        // this is not the profile the user has clicked on, or their profile
+        // then, just return it unchanged
+        profile;
+}

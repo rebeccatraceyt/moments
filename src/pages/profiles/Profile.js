@@ -21,7 +21,7 @@ const Profile = (props) => {
     const is_owner = currentUser?.username === owner;
 
     // access setProfileData hook to destructure handleFollow function
-    const { handleFollow } = useSetProfileData();
+    const { handleFollow, handleUnfollow } = useSetProfileData();
 
     return (
         <div
@@ -43,7 +43,7 @@ const Profile = (props) => {
                     following_id ? (
                         <Button
                             className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
-                            onClick={() => {}}
+                            onClick={() => handleUnfollow(profile)}
                         >
                             unfollow
                         </Button>

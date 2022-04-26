@@ -32,7 +32,7 @@ function ProfilePage() {
 
     // import profile data context to fetch data
     // with returning multiple functions within an object, destructure the data in place of the hook
-    const {setProfileData, handleFollow} = useSetProfileData();
+    const {setProfileData, handleFollow, handleUnfollow} = useSetProfileData();
 
     // import ProfileData hook to access pageProfile data
     const {pageProfile} = useProfileData();
@@ -105,7 +105,7 @@ function ProfilePage() {
                         profile?.following_id ? (
                             <Button
                                 className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
-                                onClick={() => {}}
+                                onClick={() => handleUnfollow(profile)}
                             >
                                 unfollow
                             </Button>

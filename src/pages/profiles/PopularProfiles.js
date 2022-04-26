@@ -17,6 +17,7 @@ const PopularProfiles = ( { mobile }) => {
             {popularProfiles.results.length ? (
                 <>
                     <p>Most followed profiles:</p>
+                    {/* if the <PopularProfiles /> component has the mobile prop */}
                     {mobile ? (
                         <div className="d-flex justify-content-around">
                             {/* map over popularProfiles results:

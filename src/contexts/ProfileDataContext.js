@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { axiosReq, axiosRes } from "../api/axiosDefaults";
-import { followHelper } from "../utils";
+import { followHelper, unfollowHelper } from "../utils";
 import { useCurrentUser } from "./CurrentUserContext";
 
 
@@ -53,7 +53,41 @@ export const ProfileDataProvider = ({children}) => {
                 },
                 popularProfiles: {
                     ...prevState.popularProfiles,
-                    results: prevState.popularProfiles.results.map((profile) => followHelper(profile, clickedProfile, data.id)),
+                    results: prevState.popularProfiles.results.map((profile) => 
+                        followHelper(profile, clickedProfile, data.id)),
+                }
+            }));
+        } catch(err) {
+            console.log(err);
+        }
+
+    }
+
+    // function to handle unfollowing functionality
+    const handleUnfollow = async (clickedProfile) => {
+        // for network request, add try/catch block
+        try {
+            // destructure the data property from response object
+            // delete request with axiosRes instance from followers endpoint
+            await axiosRes.delete(`/followers/${clickedProfile.following_id}/`);
+
+            // call setProfileData function:
+            //  - spread previous state
+            //  - update pageProfile object with data from API request
+            //  - update the popular profiles with data from API request
+            //      - map over the results array
+            setProfileData(prevState => ({
+                ...prevState,
+                pageProfile: {
+                    results: prevState.pageProfile.results.map((profile) => 
+                        unfollowHelper(profile, clickedProfile)
+                    ),
+                },
+                popularProfiles: {
+                    ...prevState.popularProfiles,
+                    results: prevState.popularProfiles.results.map((profile) => 
+                        unfollowHelper(profile, clickedProfile)
+                    ),
                 }
             }));
         } catch(err) {
@@ -96,7 +130,7 @@ export const ProfileDataProvider = ({children}) => {
                 This will allow the profileData value and the function to update it and be available for every child component 
             */}
             {/* expost handleFollow function so the Profile components have access to it when the follow button is clicked */}
-            <SetProfileDataContext.Provider value={{setProfileData, handleFollow}}>
+            <SetProfileDataContext.Provider value={{setProfileData, handleFollow, handleUnfollow}}>
                 {/* wrap the children components in the prop reference */}
                 {children}
             </SetProfileDataContext.Provider>
