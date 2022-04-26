@@ -10,6 +10,7 @@ import { Form, Button, Image, Col, Row, Container, Alert } from "react-bootstrap
 import axios from "axios";
 // import { SetCurrentUserContext } from "../../App"; - needed before useSetCurrentUser context import
 import { useSetCurrentUser } from "../../contexts/CurrentUserContext";
+import { useRedirect } from "../../hooks/useRedirect";
 
 function SignInForm() {
     
@@ -19,6 +20,9 @@ function SignInForm() {
 
     // import useSetCurrentUser hook from contexts
     const setCurrentUser = useSetCurrentUser();
+
+    // set userAuthStatus from useRedirect hook
+    useRedirect('loggedIn');
 
     const [signInData, setSignInData] = useState({
         username: '',
@@ -46,7 +50,10 @@ function SignInForm() {
             // call it on submit with user data returned from the API
             // setting the current user value to be used
             setCurrentUser(data.user);
-            history.push('/');
+
+            // history.push('/');
+            // above updated to below to send user back, rather than redirected to home page
+            history.goBack();
         } catch (err){
             setErrors(err.response?.data);
         }
