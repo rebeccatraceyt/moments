@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // define the baseURL (unique url for deployed API)
-axios.defaults.baseURL = 'https://rebeccatraceyt-drf-api.herokuapp.com/';
+axios.defaults.baseURL = 'https://rtt-drf-api.onrender.com';
 
 // set the data format to the format the API will be expecting
 // multipart is needed because the app will deal with images and text in requests

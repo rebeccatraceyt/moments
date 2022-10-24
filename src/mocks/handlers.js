@@ -1,7 +1,7 @@
 import { rest } from "msw";
 
 // grab API base url for mock responses
-const baseURL = "https://rebeccatraceyt-drf-api.herokuapp.com/"
+const baseURL = "https://rtt-drf-api.onrender.com"
 
 // export array to store mocked request handlers
 export const handlers = [
